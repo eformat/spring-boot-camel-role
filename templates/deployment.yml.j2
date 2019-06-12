@@ -33,7 +33,52 @@ spec:
     spec:
       containers:
       - image: {{ image }}
+        imagePullPolicy: IfNotPresent        
         name: spring-boot
         ports:
         - containerPort: 8080
           protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /deployments/config
+          name: config
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /health
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "2"
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 250Mi
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: application.yml
+            path: application.yml
+          name: {{ name }}
+        name: config                     
