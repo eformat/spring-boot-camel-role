@@ -1,0 +1,50 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ name }}
+  namespace: {{ namespace }}
+  labels:
+    app: {{ name }}
+    service: {{ name }}  
+data:
+  application.yml: |
+    spring:
+        application:
+            name: {{ name }}
+        # Enable auto-reload
+        # https://github.com/fabric8io/spring-cloud-kubernetes#propertysource-reload
+        # https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html-single/fuse_integration_services_2.0_for_openshift
+        cloud:
+            kubernetes:
+                reload:
+                    enabled: false
+                    strategy: restart_context
+
+    server:
+        address: 0.0.0.0 # lets listen on all ports to ensure we can be invoked from the pod IP
+        port: 8080
+
+    management:
+        address: 0.0.0.0
+        port: 8081 # lets use a different management port in case you need to listen to HTTP requests on 8080
+
+    logging:
+        config:
+            classpath: logback.xml
+
+    camel:
+        springboot:
+            name: helloservice
+
+    # disable all management endpoints except health
+    endpoints:
+        enabled: false
+        health:
+            enabled: true
+
+    # spring bean properties
+    helloservice:
+        message: {{ greeting-message }}
+        time: {{ greeting-timeout }}

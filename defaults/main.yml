@@ -12,3 +12,9 @@ state: present
 
 # The size of the hello-world deployment
 size: 1
+
+# Application Greeting Message default
+greeting-message: "ansible default hello"
+
+# Application Greeting Message time
+greeting-timeout: 5000

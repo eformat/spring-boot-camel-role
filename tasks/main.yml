@@ -12,5 +12,6 @@
   loop:
       - name: deployment.yml.j2
       - name: service.yml.j2
+      - name: configmap.yml.j2
       - name: route.yml.j2
         api_exists: "{{ True if 'route.openshift.io' in api_groups else False }}"
