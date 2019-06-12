@@ -14,7 +14,7 @@ state: present
 size: 1
 
 # Application Greeting Message default
-greeting-message: "ansible default hello"
+greetingMessage: "ansible default hello"
 
 # Application Greeting Message time
-greeting-timeout: 5000
+greetingTimeout: 5000
