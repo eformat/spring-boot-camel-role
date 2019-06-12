@@ -12,7 +12,7 @@ data:
   application.yml: |
     spring:
         application:
-            name: {{ name }}
+            name: helloservice
         # Enable auto-reload
         # https://github.com/fabric8io/spring-cloud-kubernetes#propertysource-reload
         # https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html-single/fuse_integration_services_2.0_for_openshift
@@ -45,6 +45,6 @@ data:
             enabled: true
 
     # spring bean properties
-    {{ name }}:
+    helloservice:
         message: {{ greetingMessage }}
         time: {{ greetingTimeout }}
