@@ -1,0 +1,39 @@
+---
+
+{% if 'apps.openshift.io' in api_groups %}
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+{% else %}
+apiVersion: apps/v1
+kind: Deployment
+{% endif %}
+metadata:
+  name: {{ name }}
+  namespace: {{ namespace }}
+  labels:
+    app: {{ name }}
+    service: {{ name }}
+spec:
+  replicas: {{ size }}
+{% if 'apps.openshift.io' in api_groups %}
+  selector:
+    app: {{ name }}
+    service: {{ name }}
+{% else %}
+  selector:
+    matchLabels:
+      app: {{ name }}
+      service: {{ name }}
+{% endif %}
+  template:
+    metadata:
+      labels:
+        app: {{ name }}
+        service: {{ name }}
+    spec:
+      containers:
+      - image: {{ image }}
+        name: spring-boot
+        ports:
+        - containerPort: 8080
+          protocol: TCP
